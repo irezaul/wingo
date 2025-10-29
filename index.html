@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real TIME WIN | RK TEAM</title>
+    <title>REAL TIME WIN </title>
     <!-- TensorFlow JS (for AI) -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <!-- FontAwesome Icons & Tailwind CSS -->
@@ -24,18 +24,16 @@
         }
 
         .container {
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
-            padding: 16px;
+            max-width: 480px;
+            margin: 20px auto;
+            padding: 24px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 0;
+            border-radius: 16px;
             backdrop-filter: blur(10px);
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             animation: fadeIn 0.8s ease-in-out;
-            height: 100vh;
+            max-height: 90vh;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         @keyframes fadeIn {
@@ -44,18 +42,17 @@
         }
 
         .heading {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
             color: #ffffff;
-            margin: 10px 0 20px;
+            margin-bottom: 24px;
             text-align: center;
             animation: glow 2s infinite;
-            line-height: 1.4;
         }
 
         @keyframes glow {
-            0%, 100% { text-shadow: 0 0 8px #00ff00, 0 0 16px #00ff00; }
-            50% { text-shadow: 0 0 16px #ff00ff, 0 0 24px #ff00ff; }
+            0%, 100% { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; }
+            50% { text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff; }
         }
 
         .box {
@@ -133,26 +130,24 @@
         /* Robot Icon and Message */
         .robot-container {
             position: fixed;
-            top: 10px;
-            right: 10px;
+            top: 20px;
+            right: 20px;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            z-index: 1000;
         }
 
         .robot-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
             transition: transform 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .robot-icon:hover {
@@ -180,19 +175,12 @@
 
 <body>
     <!-- Robot Icon and Message -->
-    <div class="robot-container">
-        
-        <div class="robot-icon" id="robot-icon">
-            <a href="https://t.me/RK_TRADER_TOP_VIP" target="_blank" style="color: white;">
-                <i class="fab fa-telegram-plane"></i>
-            </a>
-        </div>
-    </div>
+    
 
     <div class="container">
         <!-- Heading -->
         <h1 class="heading">
-            REAL TIME WIN  <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400"> <br>RK TEAM</span>
+            REAL TIME WIN   <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400">VIP </span>
         </h1>
 
         <!-- Period & Result Box -->
