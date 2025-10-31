@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <style>
+        /* Base styles already good for mobile */
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
@@ -103,11 +104,20 @@
             z-index: 10;
         }
 
-        /* small responsive tweaks */
+        /* Responsive tweaks for better mobile fit */
         @media (max-width: 520px) {
             .container {
-                margin: 12px;
-                padding: 16px;
+                margin: 0; /* Remove side margin on very small screens */
+                padding: 12px;
+                border-radius: 0; /* Full width look */
+            }
+            .heading {
+                font-size: 22px;
+            }
+            /* Reduce table header font size for space */
+            .history-table-header th {
+                font-size: 0.65rem; /* ~10.4px */
+                padding: 8px 2px;
             }
         }
     </style>
@@ -156,12 +166,13 @@
             <h2 class="text-lg font-semibold text-gray-300 text-center mb-4">Winning History (Last 10)</h2>
             <div class="overflow-x-auto" id="history-table-container" style="max-height:400px; overflow-y:auto;">
                 <table class="w-full text-sm text-left text-gray-400 table-fixed">
-                    <thead class="text-xs uppercase text-white history-table-header">
+                    <thead class="uppercase text-white history-table-header">
                         <tr>
-                            <th scope="col" class="py-2 px-1 w-1/4">Period</th>
-                            <th scope="col" class="py-2 px-1 w-1/4 text-center">Num</th>
-                            <th scope="col" class="py-2 px-1 w-1/4 text-center">Big Small</th>
-                            <th scope="col" class="py-2 px-1 w-1/4 text-center">Color</th>
+                            <!-- Adjusted widths for better mobile fit -->
+                            <th scope="col" class="py-2 px-1 w-[28%]">Period</th> 
+                            <th scope="col" class="py-2 px-1 w-[18%] text-center">Num</th>
+                            <th scope="col" class="py-2 px-1 w-[28%] text-center">Big Small</th>
+                            <th scope="col" class="py-2 px-1 w-[26%] text-center">Color</th>
                         </tr>
                     </thead>
                     <tbody id="history-table-body">
@@ -189,6 +200,7 @@
 
         // Configuration: display exactly last N results
         const HISTORY_DISPLAY_COUNT = 10;
+        const PERIOD_SLICE_LENGTH = 5; // Display only the last N digits of the period in the table
 
         // API endpoints & request payloads (using the same ones you used)
         const API_CURRENT_ISSUE = 'https://api.bdg88zf.com/api/webapi/GetGameIssue';
@@ -251,6 +263,8 @@
             const isPink = [0, 5].includes(number);           // special combos
 
             let finalDots = [];
+            // CSS colors matching image: #10B981 (Green), #EF4444 (Red), #EC4899 (Pink)
+            
             // 7, 3, 1 -> single green dot
             if (isGreen && !isPink) finalDots.push('<span class="inline-block w-3 h-3 rounded-full mr-1" style="background-color: #10B981;"></span>');
             // 8, 4, 2 -> single red dot
@@ -283,7 +297,8 @@
                     // if changed, update the displayed period and fetch previous results
                     if (issueNumber !== latestPeriod) {
                         latestPeriod = issueNumber;
-                        document.getElementById('period-number').textContent = latestPeriod.toString().slice(-17);
+                        // Display the full period string slice in the main heading
+                        document.getElementById('period-number').textContent = latestPeriod.toString().slice(-17); 
                         await fetchPreviousResults();
                     }
                 }
@@ -417,7 +432,8 @@
             previousResults.slice(0, HISTORY_DISPLAY_COUNT).forEach((entry) => {
                 // Support different property names for period
                 const periodRaw = entry.issue ?? entry.issueNumber ?? entry.issueNo ?? entry.period ?? '';
-                const periodDisplay = periodRaw.toString();
+                // Optimized for mobile: only display the last N digits of the period
+                const periodDisplay = '...' + periodRaw.toString().slice(-PERIOD_SLICE_LENGTH);
 
                 const num = toNumberSafe(entry.number);
                 const details = getNumberDetails(num);
@@ -426,10 +442,10 @@
                 tr.className = "bg-transparent border-b border-gray-700 hover:bg-gray-800";
 
                 tr.innerHTML = `
-                    <td class="py-3 px-1 font-medium text-white whitespace-nowrap">${periodDisplay}</td>
-                    <td class="py-3 px-1 text-center font-extrabold text-xl ${details.numberColorClass}">${num !== null ? num : '-'}</td>
-                    <td class="py-3 px-1 text-center">${details.bigSmall}</td>
-                    <td class="py-3 px-1 text-center flex justify-center items-center">${details.colorDotsHtml}</td>
+                    <td class="py-3 px-1 font-medium text-white whitespace-nowrap text-xs">${periodDisplay}</td>
+                    <td class="py-3 px-1 text-center font-extrabold text-lg ${details.numberColorClass}">${num !== null ? num : '-'}</td>
+                    <td class="py-3 px-1 text-center text-sm">${details.bigSmall}</td>
+                    <td class="py-3 px-1 text-center flex justify-center items-center h-full">${details.colorDotsHtml}</td>
                 `;
 
                 tbody.appendChild(tr);
@@ -454,14 +470,12 @@
 
         // Initial fetch and interval
         fetchCurrentGameIssue(); // initial call
-        // Also make sure we fetch previous results right away in case API returns without current issue update
         fetchPreviousResults();
 
         // Polling every 5s
         setInterval(async () => {
             await fetchCurrentGameIssue();
-            // fetchPreviousResults() is called by fetchCurrentGameIssue when period updates,
-            // but we also call periodically to refresh previousResults in case API updates
+            // Fetch previous results periodically even if period hasn't changed to ensure data freshness
             await fetchPreviousResults();
         }, 5000);
     </script>
