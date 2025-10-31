@@ -2,20 +2,20 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REAL TIME WIN </title>
-    <!-- TensorFlow JS (for AI) -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>REAL TIME WIN - VIP</title>
+
+    <!-- TensorFlow JS (kept in case you add AI later) -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <!-- FontAwesome Icons & Tailwind CSS -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Inter for Normal Font) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
     <style>
-        /* Normal Font and Modern Design */
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
@@ -30,15 +30,22 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             animation: fadeIn 0.8s ease-in-out;
             max-height: 90vh;
             overflow-y: auto;
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .heading {
@@ -47,237 +54,150 @@
             color: #ffffff;
             margin-bottom: 24px;
             text-align: center;
-            animation: glow 2s infinite;
+            animation: glow 2.5s infinite;
         }
 
         @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; }
-            50% { text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff; }
+            0%,
+            100% {
+                text-shadow: 0 0 8px #00ff00, 0 0 14px #00ff00;
+            }
+
+            50% {
+                text-shadow: 0 0 14px #ff00ff, 0 0 22px #ff00ff;
+            }
         }
 
         .box {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 12px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 16px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.28s ease, box-shadow 0.28s ease;
         }
 
         .box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         }
 
         .progress-bar {
             height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
             overflow: hidden;
         }
 
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, #00ff00, #ff00ff);
-            border-radius: 4px;
+            border-radius: 6px;
             transition: width 0.5s ease;
+            width: 0%;
         }
 
-        .btn {
-            background: linear-gradient(90deg, #00ff00, #ff00ff);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
+        .history-table-header {
+            background-color: #2f855a; /* green header */
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-        }
-
-        .history-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            animation: slideUp 0.5s ease-in-out;
-        }
-
-        @keyframes slideUp {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .mark {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #ff00ff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .mark.green {
-            background: #00ff00;
-        }
-
-        #history-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        /* Robot Icon and Message */
-        .robot-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .robot-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .robot-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .robot-message {
-            background: rgba(0, 0, 0, 0.8);
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            max-width: 200px;
-            text-align: center;
-            animation: fadeInMessage 0.5s ease-in-out;
-        }
-
-        @keyframes fadeInMessage {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
+        /* small responsive tweaks */
+        @media (max-width: 520px) {
+            .container {
+                margin: 12px;
+                padding: 16px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Robot Icon and Message -->
-    
-
     <div class="container">
-        <!-- Heading -->
         <h1 class="heading">
-            REAL TIME WIN   <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400">VIP </span>
+            REAL TIME WIN <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400">VIP</span>
         </h1>
-         
-        
 
-        <!-- Period & Result Box -->
+        <!-- Period & Prediction -->
         <div class="box text-center">
             <p class="text-lg font-semibold text-gray-300">
-                <i class="fas fa-calendar-alt"></i> Period: <span id="period-number" class="text-white">Loading...</span>
+                <i class="fas fa-calendar-alt"></i> Period:
+                <span id="period-number" class="text-white">Loading...</span>
             </p>
             <p class="text-lg font-semibold text-gray-300 mt-2">
-                <i class="fas fa-chart-line"></i> Result: <span id="predicted-result" class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400 font-bold">Loading...</span>
+                <i class="fas fa-chart-line"></i> Prediction:
+                <span id="predicted-result"
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400 font-bold">Loading...</span>
             </p>
-            <div class="progress-bar mt-2">
-                <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+
+            <div class="progress-bar mt-3">
+                <div id="progress-bar-fill" class="progress-bar-fill"></div>
             </div>
         </div>
 
-        <!-- Analysis Section -->
+        <!-- Analysis -->
         <div class="box mt-6">
             <h2 class="text-lg font-semibold text-gray-300 text-center">Analysis</h2>
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div class="bg-gray-800 p-4 rounded-lg text-center history-box">
-                    <p class="text-gray-300">Prediction</p>
+                    <p class="text-gray-300">Prediction Win</p>
                     <p id="won-count" class="text-xl font-bold text-green-400">0</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center history-box">
-                    <p class="text-gray-300">NUMBER</p>
+                    <p class="text-gray-300">Prediction Loss</p>
                     <p id="lost-count" class="text-xl font-bold text-red-400">0</p>
                 </div>
-                
-             
             </div>
         </div>
 
-        <!-- History Section -->
+        <!-- History Table (last 10) -->
         <div class="box mt-6">
-            <h2 class="text-lg font-semibold text-gray-300 text-center">History</h2>
-            <div id="history-list" class="grid grid-cols-1 gap-3 mt-3"></div>
+            <h2 class="text-lg font-semibold text-gray-300 text-center mb-4">Winning History (Last 10)</h2>
+            <div class="overflow-x-auto" id="history-table-container" style="max-height:400px; overflow-y:auto;">
+                <table class="w-full text-sm text-left text-gray-400 table-fixed">
+                    <thead class="text-xs uppercase text-white history-table-header">
+                        <tr>
+                            <th scope="col" class="py-2 px-1 w-1/4">Period</th>
+                            <th scope="col" class="py-2 px-1 w-1/4 text-center">Number</th>
+                            <th scope="col" class="py-2 px-1 w-1/4 text-center">Big Small</th>
+                            <th scope="col" class="py-2 px-1 w-1/4 text-center">Color</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <!-- Rows inserted by JS -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <h4 class="heading">
-            REAL TIME WIN   <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400">VIP </span>
-            <a href="https://t.me/RK_TRADER_TOP_VIP" target="_blank" class="text-blue-400 hover:text-blue-300">
+
+        <h4 class="heading text-base mt-4">
+            REAL TIME WIN <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-purple-400">VIP</span>
+            <a href="https://t.me/RK_TRADER_TOP_VIP" target="_blank" class="text-blue-400 hover:text-blue-300 ml-2">
                 <i class="fab fa-telegram"></i> Join Telegram
             </a>
         </h4>
     </div>
 
-    <!-- JavaScript Code -->
     <script>
-        let previousResults = [];
-        let latestResult = null;
-        let latestPeriod = null;
-        let history = [];
+        /***********************************************
+         * FULL working code for last 10 history & UI
+         * - Auto-refresh every 5s
+         * - Shows Period, Number, Big/Small, Color dots
+         * - Tracks prediction history (WON/LOST)
+         ***********************************************/
 
-       
+        // Configuration: display exactly last N results
+        const HISTORY_DISPLAY_COUNT = 10;
 
-        // Fetch Current Game Issue
-        async function fetchCurrentGameIssue() {
-            const apiUrl = 'https://api.bdg88zf.com/api/webapi/GetGameIssue';
-            const requestData = {
-                typeId: 1,
-                language: 0,
-                random: "40079dcba93a48769c6ee9d4d4fae23f",
-                signature: "D12108C4F57C549D82B23A91E0FA20AE",
-                timestamp: 1727792520,
-            };
+        // API endpoints & request payloads (using the same ones you used)
+        const API_CURRENT_ISSUE = 'https://api.bdg88zf.com/api/webapi/GetGameIssue';
+        const API_PREV_RESULTS = 'https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList';
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify(requestData),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.code === 0) {
-                        const currentPeriod = data.data.issueNumber;
-                        if (currentPeriod !== latestPeriod) {
-                            latestPeriod = currentPeriod;
-                            document.getElementById('period-number').textContent = latestPeriod.toString().slice(-17);
-                            fetchPreviousResults();
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("❌ Fetch error:", error);
-            }
-        }
-
-        // Fetch Previous Results
-        async function fetchPreviousResults() {
-            const apiUrl = 'https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList';
-            const requestData = {
-                pageSize: 10,
+        // Make sure pageSize matches HISTORY_DISPLAY_COUNT
+        function prevResultsRequestBody() {
+            return {
+                pageSize: HISTORY_DISPLAY_COUNT,
                 pageNo: 1,
                 typeId: 1,
                 language: 0,
@@ -285,163 +205,265 @@
                 signature: "7D637E060DA35C0C6E28DC6D23D71BED",
                 timestamp: 1727792520,
             };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    body: JSON.stringify(requestData),
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.code === 0 && data.data.list.length > 0) {
-                        previousResults = data.data.list;
-                        updateResults();
-                    }
-                }
-            } catch (error) {
-                console.error("❌ Fetch error:", error);
-            }
         }
 
-        // Update Results with New Prediction Logic
-        function updateResults() {
-            if (previousResults.length > 0) {
-                const results = previousResults.map(entry => ({ number: parseInt(entry.number) }));
-
-                // Count BIG, SMALL, GREEN, RED
-                let bigCount = 0, smallCount = 0, greenCount = 0, redCount = 0;
-                results.forEach(entry => {
-                    const num = entry.number;
-                    if (num >= 0 && num <= 4) smallCount++;
-                    else if (num >= 5 && num <= 9) bigCount++;
-
-                    if ([1, 3, 5, 7, 9].includes(num)) greenCount++;
-                    else if ([0, 2, 4, 6, 8].includes(num)) redCount++;
-                });
-
-                // Analyze last 10 results for streaks
-                const recentNumbers = results.slice(0, 10);
-                const lastTenBigSmall = recentNumbers.map(entry => (entry.number >= 0 && entry.number <= 4) ? 'SMALL' : 'BIGGG');
-                const lastTenColors = recentNumbers.map(entry => ([1, 3, 5, 7, 9].includes(entry.number)) ? 'GREEN' : 'REDDD');
-
-                // Calculate streaks
-                let bigStreak = 0, smallStreak = 0, greenStreak = 0, redStreak = 0;
-                let currentBigSmallStreak = null, currentColorStreak = null;
-
-                lastTenBigSmall.forEach(bs => {
-                    if (bs === currentBigSmallStreak) {
-                        if (bs === 'BIGGG') bigStreak++;
-                        else smallStreak++;
-                    } else {
-                        currentBigSmallStreak = bs;
-                        bigStreak = (bs === 'BIGGG') ? 1 : 0;
-                        smallStreak = (bs === 'SMALL') ? 1 : 0;
-                    }
-                });
-
-                lastTenColors.forEach(color => {
-                    if (color === currentColorStreak) {
-                        if (color === 'GREEN') greenStreak++;
-                        else redStreak++;
-                    } else {
-                        currentColorStreak = color;
-                        greenStreak = (color === 'GREEN') ? 1 : 0;
-                        redStreak = (color === 'REDDD') ? 1 : 0;
-                    }
-                });
-
-                // Generate predictions
-                const bigSmallPrediction = (bigStreak >= 3) ? 'SMALL' : (smallStreak >= 3) ? 'BIGGG' :
-                    (recentNumbers.filter(entry => entry.number >= 5).length >= 6) ? 'SMALL' : 'BIGGG';
-
-                const colorPrediction = (greenStreak >= 3) ? 'REDDD' : (redStreak >= 3) ? 'GREEN' :
-                    (greenCount > 60 && redStreak < 2) ? 'REDDD' : 'GREEN';
-
-                // Update UI with predictions
-                latestResult = `${bigSmallPrediction} | ${colorPrediction}`;
-                document.getElementById('predicted-result').textContent = latestResult;
-                updateHistory();
-            }
-        }
-
-        // Update History
-        function updateHistory() {
-            const historyContainer = document.getElementById('history-list');
-            historyContainer.innerHTML = '';
-
-            const newHistoryEntry = {
-                period: latestPeriod.toString().slice(-17),
-                prediction: latestResult,
-                status: "PENDING"
+        function currentIssueRequestBody() {
+            return {
+                typeId: 1,
+                language: 0,
+                random: "40079dcba93a48769c6ee9d4d4fae23f",
+                signature: "D12108C4F57C549D82B23A91E0FA20AE",
+                timestamp: 1727792520,
             };
+        }
 
-            // Add new entry to history
-            history.unshift(newHistoryEntry);
+        // State
+        let previousResults = []; // raw API results (most recent first expected)
+        let latestPeriod = null;
+        let latestPrediction = null;
+        let history = []; // tracking predicted periods & results [{ period, prediction, status }]
 
-            // Update previous entry status
-            if (history.length > 1) {
-                const prevEntry = history[1];
-                const actualResult = previousResults[0].number <= 4 ? 'SMALL' : 'BIGGG';
-                const actualColor = [1, 3, 5, 7, 9].includes(previousResults[0].number) ? 'GREEN' : 'REDDD';
+        // Utility: safe parse number
+        function toNumberSafe(v) {
+            const n = parseInt(v);
+            return Number.isFinite(n) ? n : null;
+        }
 
-                const bigWin = prevEntry.prediction.includes(actualResult);
-                const colorWin = prevEntry.prediction.includes(actualColor);
+        // Map number to Big/Small and color-dot html and color class
+        function getNumberDetails(num) {
+            const number = toNumberSafe(num);
+            if (number === null) {
+                return { bigSmall: '-', numberColorClass: '', colorDotsHtml: '' };
+            }
 
-                prevEntry.status = (bigWin || colorWin) ? "WON" : "LOST";
+            const bigSmall = number >= 5 ? 'Big' : 'Small';
 
-                // Show robot message for win/loss
-                if (prevEntry.status === "WON") {
-                    if (bigWin) {
-                        showRobotMessage(`🎉 BIG Won!`, true);
-                    } else if (colorWin) {
-                        showRobotMessage(`🎉 GREEN Won!`, true);
-                    }
-                } else if (prevEntry.status === "LOST") {
-                    showRobotMessage(`😢 Loss!`, false);
+            // color class for the large number display
+            let numberColorClass = '';
+            if ([1, 3, 7, 9].includes(number)) numberColorClass = 'text-green-500';
+            else if ([2, 4, 6, 8].includes(number)) numberColorClass = 'text-red-500';
+            else if (number === 5) numberColorClass = 'text-pink-500';
+            else if (number === 0) numberColorClass = 'text-purple-500';
+
+            // dots logic using image-like mapping:
+            const isGreen = [1, 3, 5, 7, 9].includes(number); // odd -> green-ish
+            const isRed = [0, 2, 4, 6, 8].includes(number);   // even -> red-ish
+            const isPink = [0, 5].includes(number);           // special combos
+
+            let finalDots = [];
+            // 7, 3, 1 -> single green dot
+            if (isGreen && !isPink) finalDots.push('<span class="inline-block w-3 h-3 rounded-full mr-1" style="background-color: #10B981;"></span>');
+            // 8, 4, 2 -> single red dot
+            if (isRed && !isPink) finalDots.push('<span class="inline-block w-3 h-3 rounded-full mr-1" style="background-color: #EF4444;"></span>');
+            // 5 -> green + pink
+            if (number === 5) finalDots.push('<span class="inline-block w-3 h-3 rounded-full mr-1" style="background-color: #10B981;"></span>', '<span class="inline-block w-3 h-3 rounded-full" style="background-color: #EC4899;"></span>');
+            // 0 -> red + pink
+            if (number === 0) finalDots.push('<span class="inline-block w-3 h-3 rounded-full mr-1" style="background-color: #EF4444;"></span>', '<span class="inline-block w-3 h-3 rounded-full" style="background-color: #EC4899;"></span>');
+
+            return { bigSmall, numberColorClass, colorDotsHtml: finalDots.join('') };
+        }
+
+        // Fetch current issue (period)
+        async function fetchCurrentGameIssue() {
+            try {
+                const resp = await fetch(API_CURRENT_ISSUE, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                    body: JSON.stringify(currentIssueRequestBody())
+                });
+
+                if (!resp.ok) {
+                    console.warn('GetGameIssue returned not ok:', resp.status);
+                    return;
                 }
+
+                const json = await resp.json();
+                if (json && json.code === 0 && json.data && json.data.issueNumber) {
+                    const issueNumber = json.data.issueNumber;
+                    // if changed, update the displayed period and fetch previous results
+                    if (issueNumber !== latestPeriod) {
+                        latestPeriod = issueNumber;
+                        document.getElementById('period-number').textContent = latestPeriod.toString().slice(-17);
+                        await fetchPreviousResults();
+                    }
+                }
+            } catch (err) {
+                console.error('fetchCurrentGameIssue error:', err);
             }
+        }
 
-            // Keep only the last 1000000 entries
-            if (history.length > 1000000) {
-                history = history.slice(0, 1000000);
+        // Fetch previous results (last N defined by HISTORY_DISPLAY_COUNT)
+        async function fetchPreviousResults() {
+            try {
+                const resp = await fetch(API_PREV_RESULTS, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                    body: JSON.stringify(prevResultsRequestBody())
+                });
+
+                if (!resp.ok) {
+                    console.warn('GetNoaverageEmerdList returned not ok:', resp.status);
+                    return;
+                }
+
+                const json = await resp.json();
+                if (json && json.code === 0 && json.data && Array.isArray(json.data.list)) {
+                    // API likely returns newest first. We'll keep that order.
+                    previousResults = json.data.list.slice(0, HISTORY_DISPLAY_COUNT);
+                    runPredictionLogicAndRender();
+                } else {
+                    console.warn('Prev results missing or malformed', json);
+                }
+            } catch (err) {
+                console.error('fetchPreviousResults error:', err);
             }
+        }
 
-            // Display history
-            let winCount = 0,
-                lossCount = 0;
-            history.forEach((entry) => {
-                const box = document.createElement('div');
-                box.className = "history-box bg-gray-800 p-4 rounded-lg text-center relative";
+        // Prediction logic (simple anti-streak / counts like you had)
+        function runPredictionLogicAndRender() {
+            // Build numbers array (most recent first)
+            const entries = previousResults
+                .map(e => {
+                    return {
+                        number: toNumberSafe(e.number),
+                        issue: e.issue ?? e.issueNumber ?? e.issueNo ?? '' // support various names
+                    };
+                })
+                .filter(e => e.number !== null);
 
-                box.innerHTML = `
-                    <p class="text-gray-300">Period: <span class="font-bold text-white">${entry.period}</span></p>
-                    <p class="text-gray-300">Prediction: <span class="font-bold text-white">${entry.prediction}</span></p>
-                    <p class="${entry.status === 'WON' ? 'text-green-400' : entry.status === 'LOST' ? 'text-red-400' : 'text-yellow-400'} font-bold">
-                        ${entry.status}
-                    </p>
-                `;
+            // Count big/small and green/red
+            let bigCount = 0, smallCount = 0, greenCount = 0, redCount = 0;
+            entries.forEach(en => {
+                if (en.number >= 0 && en.number <= 4) smallCount++;
+                else bigCount++;
 
-                historyContainer.appendChild(box);
-
-                if (entry.status === "WON") winCount++;
-                else if (entry.status === "LOST") lossCount++;
+                if ([1, 3, 5, 7, 9].includes(en.number)) greenCount++;
+                else redCount++;
             });
 
-            // Update analysis section
-            document.getElementById('won-count').textContent = winCount;
-            document.getElementById('lost-count').textContent = lossCount;
-            const winPercentage = (winCount + lossCount > 0) ? ((winCount / (winCount + lossCount)) * 100).toFixed(2) : 0;
-            document.getElementById('won-percentage').textContent = `${winPercentage}%`;
-            document.getElementById('progress-bar-fill').style.width = `${winPercentage}%`;
+            // Last up to 10 for streak detection
+            const recent = entries.slice(0, HISTORY_DISPLAY_COUNT);
+            const lastTenBigSmall = recent.map(entry => (entry.number >= 0 && entry.number <= 4) ? 'SMALL' : 'BIGGG');
+            const lastTenColors = recent.map(entry => ([1, 3, 5, 7, 9].includes(entry.number)) ? 'GREEN' : 'REDDD');
+
+            // streak calc helper
+            const calcStreak = arr => {
+                if (!arr.length) return 0;
+                const first = arr[0];
+                let i = 1;
+                while (i < arr.length && arr[i] === first) i++;
+                return i;
+            };
+
+            const bigStreak = calcStreak(lastTenBigSmall) && lastTenBigSmall[0] === 'BIGGG' ? calcStreak(lastTenBigSmall) : 0;
+            const smallStreak = calcStreak(lastTenBigSmall) && lastTenBigSmall[0] === 'SMALL' ? calcStreak(lastTenBigSmall) : 0;
+            const greenStreak = calcStreak(lastTenColors) && lastTenColors[0] === 'GREEN' ? calcStreak(lastTenColors) : 0;
+            const redStreak = calcStreak(lastTenColors) && lastTenColors[0] === 'REDDD' ? calcStreak(lastTenColors) : 0;
+
+            // Basic anti-streak predictions
+            const bigSmallPrediction = (bigStreak >= 3) ? 'SMALL' : (smallStreak >= 3) ? 'BIGGG' :
+                (bigCount > smallCount) ? 'SMALL' : 'BIGGG';
+
+            const colorPrediction = (greenStreak >= 3) ? 'REDDD' : (redStreak >= 3) ? 'GREEN' :
+                (greenCount > redCount) ? 'REDDD' : 'GREEN';
+
+            latestPrediction = `${bigSmallPrediction} | ${colorPrediction}`;
+            document.getElementById('predicted-result').textContent = latestPrediction;
+
+            // Add/Update history tracking (prediction status PENDING)
+            if (latestPeriod && latestPrediction) {
+                const periodSlice = latestPeriod.toString().slice(-17);
+                const existing = history.find(h => h.period === periodSlice);
+                if (!existing) {
+                    history.unshift({ period: periodSlice, prediction: latestPrediction, status: "PENDING" });
+                    // keep only last 100 history entries
+                    if (history.length > 100) history = history.slice(0, 100);
+                } else {
+                    // keep prediction fresh
+                    existing.prediction = latestPrediction;
+                }
+            }
+
+            // Now mark the most recent prediction (the last completed period)
+            // We assume previousResults[0] is the most recent completed result
+            if (previousResults.length > 0) {
+                const actual = previousResults[0];
+                const actualNum = toNumberSafe(actual.number);
+                if (actualNum !== null) {
+                    const actualBigSmall = (actualNum >= 5) ? 'BIGGG' : 'SMALL';
+                    const actualColor = ([1, 3, 5, 7, 9].includes(actualNum)) ? 'GREEN' : 'REDDD';
+                    const actualPeriod = (actual.issue ?? actual.issueNumber ?? actual.issueNo ?? '').toString().slice(-17);
+
+                    const histIndex = history.findIndex(h => h.period === actualPeriod);
+                    if (histIndex !== -1 && history[histIndex].status === "PENDING") {
+                        const prevEntry = history[histIndex];
+                        const bigWin = prevEntry.prediction.includes(actualBigSmall);
+                        const colorWin = prevEntry.prediction.includes(actualColor);
+                        prevEntry.status = (bigWin || colorWin) ? "WON" : "LOST";
+                    }
+                }
+            }
+
+            renderHistoryTable();
+            updateAnalysisSection();
         }
 
-        // Auto-Fetch Every 5 Seconds
-        setInterval(fetchCurrentGameIssue, 5000);
-        fetchCurrentGameIssue(); // Initial fetch
+        // Render the history table (last N actual results)
+        function renderHistoryTable() {
+            const tbody = document.getElementById('history-table-body');
+            tbody.innerHTML = '';
+
+            // previousResults expected most recent first
+            previousResults.slice(0, HISTORY_DISPLAY_COUNT).forEach((entry) => {
+                // Support different property names for period
+                const periodRaw = entry.issue ?? entry.issueNumber ?? entry.issueNo ?? entry.period ?? '';
+                const periodDisplay = periodRaw.toString();
+
+                const num = toNumberSafe(entry.number);
+                const details = getNumberDetails(num);
+
+                const tr = document.createElement('tr');
+                tr.className = "bg-transparent border-b border-gray-700 hover:bg-gray-800";
+
+                tr.innerHTML = `
+                    <td class="py-3 px-1 font-medium text-white whitespace-nowrap">${periodDisplay}</td>
+                    <td class="py-3 px-1 text-center font-extrabold text-xl ${details.numberColorClass}">${num !== null ? num : '-'}</td>
+                    <td class="py-3 px-1 text-center">${details.bigSmall}</td>
+                    <td class="py-3 px-1 text-center flex justify-center items-center">${details.colorDotsHtml}</td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Update analysis: won/lost counts and progress bar
+        function updateAnalysisSection() {
+            let wins = 0, losses = 0;
+            history.forEach(h => {
+                if (h.status === "WON") wins++;
+                else if (h.status === "LOST") losses++;
+            });
+
+            document.getElementById('won-count').textContent = wins;
+            document.getElementById('lost-count').textContent = losses;
+
+            const total = wins + losses;
+            const winPct = (total > 0) ? (wins / total * 100).toFixed(2) : 0;
+            document.getElementById('progress-bar-fill').style.width = `${winPct}%`;
+        }
+
+        // Initial fetch and interval
+        fetchCurrentGameIssue(); // initial call
+        // Also make sure we fetch previous results right away in case API returns without current issue update
+        fetchPreviousResults();
+
+        // Polling every 5s
+        setInterval(async () => {
+            await fetchCurrentGameIssue();
+            // fetchPreviousResults() is called by fetchCurrentGameIssue when period updates,
+            // but we also call periodically to refresh previousResults in case API updates
+            await fetchPreviousResults();
+        }, 5000);
     </script>
 </body>
 
